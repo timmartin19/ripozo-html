@@ -29,7 +29,17 @@ _FIELD_TYPES = {
 
 
 class HTMLField(object):
+    """
+    A holder in place of a namedtuple due to performance
+    """
     def __init__(self, name, type_, default):
+        """
+        A data holder to construct an HTMl field.
+
+        :param unicode name: The name of the field
+        :param unicode type_: The html type of the input
+        :param unicde default: The default value for the field
+        """
         self.name = name
         self.type_ = type_
         self.default = default
@@ -107,14 +117,11 @@ class HTMLAdapter(AdapterBase):
             adapter_dicts.append(adapter_dict)
         return adapter_dicts
 
-
-    def _get_actions(self):
-        return self._actions
-
     @property
     def _actions(self):
         """
-        Gets the list of actions in an appropriately SIREN format
+        Gets the list of actions in an appropriate format for Jinja2
+        to read.
 
         :return: The list of actions
         :rtype: list
@@ -136,8 +143,7 @@ class HTMLAdapter(AdapterBase):
 
     def generate_fields_for_endpoint_funct(self, endpoint_func):
         """
-        Returns the action's fields attribute in a SIREN
-        appropriate format.
+        Returns the action's fields for the inputs on the form.
 
         :param apimethod endpoint_func:
         :return: A dictionary of action fields
