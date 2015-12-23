@@ -1,0 +1,49 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+          crossorigin="anonymous">
+    {% block css %}
+    <style>
+        {% include 'stylesheet.css' %}
+    </style>
+    {% endblock %}
+    <title>ripozo viewer</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Resource</h3>
+                {% block resource %}
+                    {% include 'resource.jinja' %}
+                {% endblock %}
+            </div>
+        </div>
+
+    <hr/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Actions</h3>
+                {% block action %}
+                    {% include 'actions.jinja' %}
+                {% endblock %}
+            </div>
+        </div>
+
+    <hr/>
+
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>Raw View</h3>
+                {% block rawview%}
+                    {% include 'raw.jinja' %}
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

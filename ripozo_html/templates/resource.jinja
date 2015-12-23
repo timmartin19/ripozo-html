@@ -1,0 +1,61 @@
+{% for resource in resources recursive %}
+
+    <div class="row"> {% set res_url = adapter.combine_base_url_with_resource_url(resource.url) %}
+        <div class="col-xs-12">
+            <h4><a href="{{ res_url }}">{{ resource.resource_name }}</a></h4>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Properties</h4>
+                </div>
+                <div class="panel-body">
+                    {% for key, value in resource.properties.items() %}
+                        <div>
+                            <span><b>{{ key }}:</b></span>
+                            <span>{{ value }}</span>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Relationships</h4>
+                </div>
+                <div class="panel-body">
+                    {% for related, resource_name, embedded in resource.related_resources %}
+                        {% if embedded %}
+                            {{ loop(related) }}
+                        {% else %}
+                            <div>
+                                {% set related_url = adapter.combine_base_url_with_resource_url(related.url) %}
+                                <li><a href="{{ related_url }}">{{ resource_name }}</a></li>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Links</h4>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        {% for link, link_name, embedded in resource.linked_resources %}
+                            {% set link_url = adapter.combine_base_url_with_resource_url(link.url) %}
+                            <li><a href="{{ link_url }}">{{ link_name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endfor %}

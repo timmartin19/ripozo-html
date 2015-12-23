@@ -1,0 +1,27 @@
+<div class="adapter-output">
+    <div>
+        <span><b>Adapter Name:</b></span>
+        <span>{{ adapter['name'] }}</span>
+    </div>
+    <div>
+        <span><b>Content-Type Header:</b></span>
+        <span>{{ adapter['content_type'] }}</span>
+    </div>
+    <div>
+        <pre><code id="code-{{ adapter['name'] }}"></code></pre>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        console.log('here');
+        var codeBlock = $("code#code-{{ adapter['name'] }}");
+        var body = '{{ adapter['body'] }}';
+        try {
+            body =  JSON.stringify(JSON.parse(body), null, 2);
+        } catch (err) {
+            console.log('Seems to be a non json type');
+        }
+        codeBlock.text(body);
+    });
+</script>

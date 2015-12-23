@@ -1,0 +1,47 @@
+{% set id_ = action['id'] %}
+<h4>{{ action['title'] }}</h4>
+<div>
+    <div>
+        <span><b>URL:</b></span>
+        <span><a href="{{ action['url'] }}">{{ action['url'] }}</a></span>
+    </div>
+    <div>
+        <span><b>Method:</b></span>
+        <span>{{ action['method'] }}</span>
+    </div>
+</div>
+<form id="{{ id_ }}">
+    {% for field in action['fields'] %}
+        <div {% if field.type == "checkbox" %}class="checkbox"{% else %}class="form-group"{% endif %}>
+            <label>{{ field.name }}</label>
+            <input type="{{ field.type }}" value="{{ field.default }}" name="{{ field.name }}" class="form-control"/>
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-success">Submit</button>
+</form>
+
+<script type="application/javascript">
+    var form = $('form#{{ id_ }}');
+
+    function send_request () {
+        {% if action['method']|upper in ['GET', 'HEAD', 'OPTIONS'] %}
+            window.location.href = "{{ action['url'] }}";
+        {% else %}
+            $.ajax({
+                data: form.serialize(),
+                method: "{{ action['method']|upper }}",
+                url: "{{ action['url'] }}",
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert(textStatus + ': ' + errorThrown);
+                },
+                success: function (data) {
+                    document.write(data);
+                    document.close();
+                }
+            });
+        {% endif %}
+        return false;
+    }
+
+    form.submit(send_request)
+</script>

@@ -1,0 +1,34 @@
+<div>
+    <div class="form-group">
+        <select id="adapter-select" class="form-control">
+            <option></option>
+            {% for adapter in all_adapters %}
+                <option value="{{ adapter['name'] }}">{{ adapter['name'] }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% for adapter in all_adapters %}
+        <div class="adapter-container" id="{{ adapter['name'] }}" style="display: none;"
+        {% include 'adapter.jinja' %}
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    $(document).ready(function () {
+        var adapterSelect = $('select#adapter-select');
+        adapterSelect.change(function () {
+            $(".adapter-container").hide();
+            if (this.value) {
+                var selector = ".adapter-container#" + this.value;
+                $(selector).show();
+            }
+        });
+
+        var selected = adapterSelect.children('option').eq(1);
+        selected.prop('selected', true);
+        var adapterId = selected.prop('value');
+        $('.adapter-container#' + adapterId).show();
+    });
+</script>

@@ -1,0 +1,30 @@
+<div class="form-group">
+    <select id="action-select" class="form-control">
+        <option></option>
+        {% for action in actions %}
+            <option value="{{ action['id'] }}">{{ action['title'] }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% for action in actions %}
+    <div class="action" id="{{ action['id'] }}" style="display: none;">
+        {% include 'form.jinja' %}
+    </div>
+{% endfor %}
+
+<script>
+    $(document).ready(function () {
+        var actionSelect = $('select#action-select');
+        actionSelect.change(function () {
+            $('.action').hide();
+            if (this.value) {
+                $(".action#" + this.value).show();
+            }
+        });
+
+        var selected = actionSelect.children('option').eq(1);
+        selected.prop('selected', true);
+        var actionId = selected.prop('value');
+        $('.action#' + actionId).show();
+    });
+</script>
