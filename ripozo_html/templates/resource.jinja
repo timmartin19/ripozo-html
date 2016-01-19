@@ -5,8 +5,8 @@
             <h4><a href="{{ res_url }}">{{ resource.resource_name }}</a></h4>
         </div>
 
-        <div class="col-lg-4">
-            <div class="panel panel-info">
+        <div class="col-lg-6">
+            <div class="panel panel-info scrollable-panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">Properties</h4>
                 </div>
@@ -21,28 +21,8 @@
             </div>
         </div>
 
-        <div class="col-lg-4">
-            <div class="panel panel-info">
-                <div class="panel-heading">
-                    <h4 class="panel-title">Relationships</h4>
-                </div>
-                <div class="panel-body">
-                    {% for related, resource_name, embedded in resource.related_resources %}
-                        {% if embedded %}
-                            {{ loop(related) }}
-                        {% else %}
-                            <div>
-                                {% set related_url = adapter.combine_base_url_with_resource_url(related.url) %}
-                                <li><a href="{{ related_url }}">{{ resource_name }}</a></li>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-4">
-            <div class="panel panel-info">
+        <div class="col-lg-6">
+            <div class="panel panel-info scrollable-panel">
                 <div class="panel-heading">
                     <h4 class="panel-title">Links</h4>
                 </div>
@@ -53,6 +33,42 @@
                             <li><a href="{{ link_url }}">{{ link_name }}</a></li>
                         {% endfor %}
                     </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="panel panel-info scrollable-panel">
+                <div class="panel-heading">
+                    <h4 class="panel-title">Relationships</h4>
+                </div>
+                <div class="panel-body">
+                    {% set parent_loop = loop %}
+                    {% for related, resource_name, embedded in resource.related_resources %}
+                        {% if related is sequence %}
+                            {% for rel in related %}
+                                {% if embedded %}
+                                    {{ parent_loop([rel]) }}
+                                {% else %}
+                                    <div>
+                                        {% set related_url = adapter.combine_base_url_with_resource_url(rel.url) %}
+                                        <li><a href="{{ related_url }}">{{ resource_name }}</a></li>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {% else %}
+                            {% if embedded %}
+                                {{ parent_loop([related]) }}
+                            {% else %}
+                                <div>
+                                    {% set related_url = adapter.combine_base_url_with_resource_url(related.url) %}
+                                    <li><a href="{{ related_url }}">{{ resource_name }}</a></li>
+                                </div>
+                            {% endif %}
+                        {% endif %}
+                        <hr/>
+                    {% endfor %}
                 </div>
             </div>
         </div>

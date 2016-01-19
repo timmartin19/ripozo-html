@@ -28,7 +28,7 @@ _FIELD_TYPES = {
 }
 
 
-class HTMLField(object):
+class _HTMLField(object):
     """
     A holder in place of a namedtuple due to performance
     """
@@ -67,13 +67,13 @@ class HTMLAdapter(AdapterBase):
         :type resource: ripozo.resource.resource_base.ResourceBase
         :param str|unicode base_url: The url to prepend to
             all of the urls.
-        :param list[ripozo.adapters.AdapterBase] adapters: A list
-            of adapters whose formats will be displayed to the user.
+        :param adapters: A list of adapters whose formats will be displayed to the user.
+        :type adapters: list[ripozo.adapters.AdapterBase]|tuple(ripozo.adapters.AdapterBase)
         :param tuple adapters: The adapters to show when
             as available options in the api.
         """
         super(HTMLAdapter, self).__init__(resource, base_url=base_url)
-        self._adapter_types = adapters or self._default_adapters
+        self._adapter_types = adapters if adapters is not None else self._default_adapters
 
     def __call__(self, resource, **kwargs):
         """
@@ -109,10 +109,15 @@ class HTMLAdapter(AdapterBase):
 
     @property
     def _adapters(self):
+        """
+        :return: A list of adapter dicts for Jinja
+        :rtype: list[dict]
+        """
         adapter_dicts = []
-        for a in self._adapter_types:
-            adapter = a(self.resource, base_url=self.base_url)
-            adapter_dict = dict(name=a.__name__, content_type=a.formats[0],
+        for adapter_type in self._adapter_types:
+            adapter = adapter_type(self.resource, base_url=self.base_url)
+            adapter_dict = dict(name=adapter_type.__name__,
+                                content_type=adapter_type.formats[0],
                                 body=adapter.formatted_body)
             adapter_dicts.append(adapter_dict)
         return adapter_dicts
@@ -158,7 +163,7 @@ class HTMLAdapter(AdapterBase):
         for field in action_fields:
             if field.arg_type is input_categories.URL_PARAMS:
                 continue
-            field_obj = HTMLField(field.name, _FIELD_TYPES[type(field)],
-                                  self.resource.properties.get(field.name))
+            field_obj = _HTMLField(field.name, _FIELD_TYPES[type(field)],
+                                   self.resource.properties.get(field.name))
             return_fields.append(field_obj)
         return return_fields

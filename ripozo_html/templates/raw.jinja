@@ -9,7 +9,7 @@
     </div>
 
     {% for adapter in all_adapters %}
-        <div class="adapter-container" id="{{ adapter['name'] }}" style="display: none;"
+        <div class="adapter-container scrollable-panel" id="{{ adapter['name'] }}" style="display: none;"
         {% include 'adapter.jinja' %}
         </div>
     {% endfor %}

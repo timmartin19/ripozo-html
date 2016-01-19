@@ -1,3 +1,13 @@
 select {
     max-width: 15em;
 }
+
+.panel-info .panel-info {
+    font-size: smaller;
+    opacity: .6;
+}
+
+.scrollable-panel {
+    overflow-y: scroll;
+    max-height: 400px;
+}
